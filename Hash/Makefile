@@ -1,4 +1,4 @@
-ifdef HMPP_BIN_PATH 
+ifdef HMPP_BIN_PATH
 all: clean checkEnv setFlags interop_c
 else
 all: clean checkEnv setFlags interop_c interop_f
@@ -8,14 +8,8 @@ endif
 
 checkEnv:
 ifdef CRAY_PRGENVCRAY
-    ifndef HMPP_BIN_PATH
-        ifndef CRAY_ACCEL_TARGET
-            $(error craype-accel-nvidia35 not loaded)
-        endif
-    else
-        ifdef CRAY_ACCEL_TARGET
-            $(error craype-accel-nvidia35 not compatible with CapsMC. Use cudatoolkit module)
-        endif
+    ifndef CRAY_ACCEL_TARGET
+        $(error craype-accel-nvidia35 not loaded)
     endif
 endif
 ifndef CRAY_CUDATOOLKIT_VERSION
@@ -23,23 +17,15 @@ ifndef CRAY_CUDATOOLKIT_VERSION
 endif
 
 setFlags:
-ifdef HMPP_BIN_PATH
-    ifdef CRAY_PRGENVGNU
-        CFLAGS = -std=c99
-    endif
-    ifdef CRAY_PRGENVINTEL
-        CFLAGS = -restrict
-    endif
-else
-    ifdef CRAY_PRGENVPGI
-        CFLAGS = -acc -Minline
-        FFLAGS = -acc -Minline
-    endif
-    ifdef CRAY_PRGENVCRAY
-        CFLAGS = -hpragma=acc
-        FFLAGS = -hacc
-    endif
+ifdef CRAY_PRGENVPGI
+    CFLAGS = -acc -Minline -ta=tesla:cc35
+    FFLAGS = -acc -Minline -ta=tesla:cc35
 endif
+ifdef CRAY_PRGENVCRAY
+    CFLAGS = -hpragma=acc
+    FFLAGS = -hacc
+endif
+
 LIBS = -lcurand
 
 interop_c: sort.c sortGPU.cu
