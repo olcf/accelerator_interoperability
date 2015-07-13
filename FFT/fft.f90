@@ -1,4 +1,8 @@
 program fft
+    IMPLICIT NONE
+    USE ISO_C_BINDING
+    USE openacc
+
     INTEGER, PARAMETER :: n = 256
     COMPLEX :: data(n)
     INTEGER :: i,max_id

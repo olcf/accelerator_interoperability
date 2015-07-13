@@ -11,8 +11,10 @@ module cufft
 end module cufft
 
 program fft
+    IMPLICIT NONE
     USE ISO_C_BINDING
     USE cufft
+    USE openacc
 
     INTEGER, PARAMETER :: n = 256
     COMPLEX (C_FLOAT_COMPLEX) :: data(n)
