@@ -1,6 +1,6 @@
 module cufft
   INTERFACE
-    subroutine launchcufft(data, n) BIND (C, NAME='launchCUFFT')
+    subroutine launchcufft(data, n, stream) BIND (C, NAME='launchCUFFT')
       USE ISO_C_BINDING
       implicit none
       type (C_PTR), value :: data
