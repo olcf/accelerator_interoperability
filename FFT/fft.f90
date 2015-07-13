@@ -1,7 +1,7 @@
 program fft
-    IMPLICIT NONE
     USE ISO_C_BINDING
     USE openacc
+    IMPLICIT NONE
 
     INTEGER, PARAMETER :: n = 256
     COMPLEX :: data(n)
