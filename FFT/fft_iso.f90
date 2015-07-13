@@ -5,7 +5,7 @@ module cufft
       implicit none
       type (C_PTR), value :: data
       integer (C_INT), value :: n
-      type (C_PTR), value :: stream
+      integer (C_LONG), value :: stream
     end subroutine launchcufft
   END INTERFACE
 end module cufft
@@ -20,7 +20,7 @@ program fft
     COMPLEX (C_FLOAT_COMPLEX) :: data(n)
     INTEGER (C_INT):: i
     INTEGER :: max_id,istat
-    TYPE (C_PTR) :: stream
+    INTEGER(kind=8) :: stream
 
     ! Initialize interleaved input data on host
     REAL :: w = 7.0

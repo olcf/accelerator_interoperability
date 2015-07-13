@@ -6,7 +6,7 @@ program fft
     INTEGER, PARAMETER :: n = 256
     COMPLEX :: data(n)
     INTEGER :: i,max_id
-    TYPE(C_PTR) :: stream
+    INTEGER(kind=8) :: stream
 
     ! Initialize interleaved input data on host
     REAL :: w = 7.0
