@@ -37,7 +37,7 @@ program fft
         ! Inside this region the device data pointer will be used
         !$acc host_data use_device(data)
         stream = acc_get_cuda_stream(acc_async_sync)
-        call launchcufft(C_LOC(data), n, stream, stream)
+        call launchcufft(C_LOC(data), n, stream)
         !$acc end host_data
 
     !$acc end data
