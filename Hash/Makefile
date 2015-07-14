@@ -27,14 +27,15 @@ ifdef CRAY_PRGENVCRAY
 endif
 
 LIBS = -lcurand
+INC = -I$(THRUST_INCLUDE)
 
 interop_c: sort.c sortGPU.cu
 	mkdir -p bin
-	nvcc -c sortGPU.cu
-	cc $(CFLAGS) $(LIBS) -o bin/sort_c sort.c sortGPU.o
+	nvcc -c $(INC) sortGPU.cu
+	cc $(CFLAGS) $(LIBS) $(INC) sort.c sortGPU.o -o bin/interop_c
 interop_f: sort.f90 sortGPU.cu
 	mkdir -p bin
-	nvcc -c sortGPU.cu
+	nvcc -c $(INC) sortGPU.cu
 	ftn $(FFLAGS) $(LIBS) sort.f90 sortGPU.o -o bin/interop_f
 
 clean:

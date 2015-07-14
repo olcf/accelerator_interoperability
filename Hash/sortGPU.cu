@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <curand.h>
-#include <thrust/device_ptr.h>
 #include <thrust/sort.h>
+#include <thrust/execution_policy.h>
 #include <thrust/binary_search.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/system_error.h>
@@ -34,7 +34,7 @@ extern "C" void fill_rand(float *d_buffer, int num, void *stream)
 }
 
 // Sort key value pairs
-extern "C" void sort(int *d_keys, int *d_values, int num, void *stream)
+extern "C" void sort(int *keys, int *values, int num, void *stream)
 {
     try {
         // Sort keys AND values array by key

@@ -1,19 +1,21 @@
 ! Module containing nvcc compiled function declarations and hash function
 module sortgpu
   INTERFACE
-    subroutine fill_rand(positions, length) BIND(C,NAME='fill_rand')
+    subroutine fill_rand(positions, length, stream) BIND(C,NAME='fill_rand')
       USE ISO_C_BINDING
       implicit none
       type (C_PTR), value :: positions
       integer (C_INT), value :: length
+      type (C_PTR), value :: stream
     end subroutine fill_rand
  
-    subroutine sort(keys, values, num) BIND(C,NAME='sort')
+    subroutine sort(keys, values, num, stream) BIND(C,NAME='sort')
       USE ISO_C_BINDING
       implicit none
       type (C_PTR), value :: keys
       type (C_PTR), value :: values
       integer (C_INT), value :: num
+      type (C_PTR), value :: stream
     end subroutine sort
   END INTERFACE
  
@@ -41,6 +43,7 @@ end module sortgpu
 program interop
     use ISO_C_BINDING
     use sortgpu
+    use openacc
     implicit none
  
     integer :: i,indx
@@ -51,13 +54,17 @@ program interop
     real (C_FLOAT) :: positions(length)
     integer(C_INT) :: keys(num)
     integer(C_INT) :: values(num)
- 
+    type (C_PTR) :: stream
+
+    ! OpenACC may not use the default CUDA stream so we must query it
+    stream = acc_get_cuda_stream(acc_async_sync)
+
     ! OpenACC will create positions, keys, and values arrays on the device
     !$acc data create(positions, keys, values)
  
         ! NVIDIA cuRandom will create our initial random data
         !$acc host_data use_device(positions)
-        call fill_rand(C_LOC(positions), length)
+        call fill_rand(C_LOC(positions), length, stream)
         !$acc end host_data
  
         ! OpenACC will calculate the hash value for each particle
@@ -76,7 +83,7 @@ program interop
  
         ! Thrust will be used to sort our key value pairs
         !$acc host_data use_device(keys, values)
-        call sort(C_LOC(keys), C_LOC(values), num);
+        call sort(C_LOC(keys), C_LOC(values), num, stream);
         !$acc end host_data
  
     !$acc end data    

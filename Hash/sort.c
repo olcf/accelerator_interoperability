@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "openacc.h"
 
 // Forward declaration of nvcc compiled functions
 void fill_rand(float *d_buffer, int num, void *stream);
