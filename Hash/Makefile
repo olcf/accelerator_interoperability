@@ -15,6 +15,9 @@ endif
 ifndef CRAY_CUDATOOLKIT_VERSION
     $(error cudatoolkit module not loaded)
 endif
+ifndef THRUST_INCLUDE
+    $(error thrust module not loaded)
+endif
 
 setFlags:
 ifdef CRAY_PRGENVPGI

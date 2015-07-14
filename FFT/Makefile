@@ -1,4 +1,4 @@
-all: clean checkEnv setFlags interop_c interop_iso_f
+all: clean checkEnv setFlags interop_c interop_f
 
 .PHONY: checkEnv setFlags clean
 
@@ -27,11 +27,11 @@ interop_c: fft.c cufft.cu
 	mkdir -p bin
 	nvcc -c cufft.cu
 	cc $(CFLAGS) $(LIBS) -o bin/interop_c fft.c cufft.o
-interop_iso_f: fft_iso.f90 cufft.cu
+interop_f: fft.f90 cufft.cu
 	mkdir -p bin
 	nvcc -c cufft.cu
-	ftn -c $(FFLAGS) fft_iso.f90
-	ftn $(FFLAGS) -o bin/interop_iso_f fft_iso.o cufft.o $(LIBS)
+	ftn -c $(FFLAGS) fft.f90
+	ftn $(FFLAGS) -o bin/interop_f fft.o cufft.o $(LIBS)
 
 clean:
 	rm -f *.o
